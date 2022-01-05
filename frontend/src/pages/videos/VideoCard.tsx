@@ -29,13 +29,13 @@ function VideoCardPage() {
   const data: any = [
     {
       data: {
-        '': 0,
+       
       },
       meta: { color: '' },
     },
   ];
   const captions: any = {
-    '': '',
+   
   };
   const video = useVideoMetadata(video_id);
   if ('criteria_scores' in video) {
@@ -56,8 +56,8 @@ function VideoCardPage() {
       <div className={classes.root}>
         <VideoCardFromId videoId={video_id} />
       </div>
-      <div className={classes.chart}>
-        <RadarChart captions={captions} data={data} size={450} />
+      <div className={classes.chart}> 
+      {data!={} && <RadarChart captions={captions} data={data} size={450} />}
       </div>
     </div>
   );
