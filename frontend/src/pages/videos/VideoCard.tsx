@@ -25,39 +25,42 @@ const useStyles = makeStyles(() => ({
 function VideoCardPage() {
   const classes = useStyles();
   const { video_id } = useParams<{ video_id: string }>();
-  // data and captions are used for the radarchart in this page
-  const data: any = [
-    {
-      data: {
-       
-      },
-      meta: { color: '' },
-    },
-  ];
-  const captions: any = {
-   
-  };
+
   const video = useVideoMetadata(video_id);
-  if ('criteria_scores' in video) {
-    console.log(video.criteria_scores);
-    video.criteria_scores?.forEach((criteria) => {
-      if (criteria.score != undefined) {
-        const caption = criteria.criteria;
-        captions[caption] = criteria.criteria;
-        data[0].data[caption] = criteria.score;
-        console.log(captions);
-        console.log(data);
+
+  const captions = video.criteria_scores
+    ? Object.fromEntries(
+        video.criteria_scores.map((criteria) => [
+          criteria.criteria,
+          criteria.criteria,
+        ])
+      )
+    : null;
+
+  const data = video.criteria_scores
+    ? {
+        data: Object.fromEntries(
+          video.criteria_scores.map((criteria) => [
+            criteria.criteria,
+            criteria.score,
+          ])
+        ),
+        meta: { color: '' },
       }
-    });
-  }
+    : null;
+
+  console.log(captions);
+  console.log(data);
 
   return (
     <div>
       <div className={classes.root}>
         <VideoCardFromId videoId={video_id} />
       </div>
-      <div className={classes.chart}> 
-      {data!={} && <RadarChart captions={captions} data={data} size={450} />}
+      <div className={classes.chart}>
+        {video.criteria_scores && (
+          <RadarChart captions={captions} data={[data]} size={450} />
+        )}
       </div>
     </div>
   );
